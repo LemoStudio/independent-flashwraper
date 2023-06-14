@@ -73,7 +73,11 @@ void FlashLib::FlashWraper::CallFunction(String^ cmd)
 		String^ str = "<invoke name=\"addText\" returntype=\"xml\"><arguments><string>";
 		str += cmd;
 		str += "</string></arguments></invoke>";
+#ifdef UNICODE
 		IntPtr pStrPtr = Marshal::StringToHGlobalUni(str);
+#else
+		IntPtr pStrPtr = Marshal::StringToHGlobalAnsi(str);
+#endif
 		TCHAR* pStr = static_cast<TCHAR*>(pStrPtr.ToPointer());
 		pFlash->CallFunction(pStr);
 		Marshal::FreeHGlobal(pStrPtr);
